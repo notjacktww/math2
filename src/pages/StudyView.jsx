@@ -199,7 +199,7 @@ export default function StudyView() {
         </button>
         <button className="rating-btn rating-partial" onClick={() => handleRate(1)}>
           <span className="rating-num">2</span>
-          <span className="rating-label">Understand why</span>
+          <span className="rating-label">Wrong but understand why</span>
           <span className="rating-pts">+1 pt</span>
         </button>
         <button className="rating-btn rating-missed" onClick={() => handleRate(0)}>
