@@ -57,7 +57,7 @@ function exprToLatex(e) {
 }
 
 function renderK(latex) {
-  const block = /\\frac|\\int|\\sum(?!_)|\\prod/.test(latex);
+  const block = /\\int|\\sum(?!_)|\\prod/.test(latex);
   try {
     return {
       html: katex.renderToString(latex, { throwOnError: false, output: 'html', displayMode: block }),
