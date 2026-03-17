@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import MathText from './MathText';
+import { getQuestionDisplay } from '../utils/questionContent';
 
 const RATING_LABELS = { 2: 'Got it', 1: 'Partial', 0: 'Missed' };
 const RATING_CLASSES = { 2: 'rating-green', 1: 'rating-amber', 0: 'rating-red' };
@@ -8,7 +9,8 @@ export default function QuestionCard({ item, lastRating }) {
   const { question, section } = item;
   const ptype = section.ptypes.find((p) => p.id === question.ptype);
   const [showSolution, setShowSolution] = useState(false);
-  const hasSolution = question.solution && question.solution.length > 0;
+  const display = getQuestionDisplay(question);
+  const hasSolution = display.solution.length > 0;
 
   return (
     <div className="question-card">
@@ -22,13 +24,16 @@ export default function QuestionCard({ item, lastRating }) {
           </span>
         )}
       </div>
-      <MathText text={question.text} className="question-text" />
+      <MathText text={display.prompt} className="question-text" />
       {hasSolution && (
         <div className="solution-area">
           {showSolution ? (
             <div className="solution-box">
               <div className="solution-label">Solution</div>
-              <MathText text={question.solution} className="solution-text" />
+              <MathText
+                text={display.solution}
+                className={`solution-text${display.placeholder ? ' solution-text-missing' : ''}`}
+              />
             </div>
           ) : (
             <button className="btn-reveal" onClick={() => setShowSolution(true)}>

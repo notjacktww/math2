@@ -68,6 +68,10 @@ function renderK(latex) {
   }
 }
 
+function looksLikeLatex(src) {
+  return /\\[A-Za-z]+|\\[{}[\]^_]|^\s*[-+*/=<>]|\\dfrac|\\frac|\\left|\\right/.test(src);
+}
+
 // ── Marker helpers ────────────────────────────────────────────────────────────
 const MS = '\x02';  // start
 const ME = '\x03';  // end
@@ -222,7 +226,8 @@ function splitMarked(marked) {
 
 // ── Render $...$ as a single KaTeX expression (whole expression, consistent font)
 function inlineMath(src) {
-  const { html, block } = renderK(exprToLatex(src));
+  const latex = looksLikeLatex(src) ? src : exprToLatex(src);
+  const { html, block } = renderK(latex);
   return { type: 'math', html, block };
 }
 

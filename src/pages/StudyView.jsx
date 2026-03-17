@@ -42,19 +42,25 @@ function getScopeMastery(scope, getAllStats, getTestStats, getSectionStats) {
 
 export default function StudyView() {
   const { scope } = useParams();
+  return <StudySessionView key={scope} scope={scope} />;
+}
+
+function StudySessionView({ scope }) {
   const navigate = useNavigate();
   const { scores, getScore, setScore, getAllStats, getTestStats, getSectionStats } = useProgress();
+  const initialQuestions = getQuestionsForScope(scope, DATA);
+  const initialMastery = getScopeMastery(scope, getAllStats, getTestStats, getSectionStats);
 
-  const [queue, setQueue] = useState(null);
+  const [queue, setQueue] = useState(() => buildQueue(initialQuestions, scores));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sessionDone, setSessionDone] = useState(false);
   const [exitConfirm, setExitConfirm] = useState(false);
-  const [sessionStats, setSessionStats] = useState({ rated: 0, startMastery: 0 });
+  const [sessionStats, setSessionStats] = useState({ rated: 0, startMastery: initialMastery });
 
   const color = getScopeColor(scope);
   const label = getScopeLabel(scope);
 
-  const initQueue = useCallback(() => {
+  const resetSession = useCallback(() => {
     const questions = getQuestionsForScope(scope, DATA);
     const q = buildQueue(questions, scores);
     setQueue(q);
@@ -64,25 +70,9 @@ export default function StudyView() {
       rated: 0,
       startMastery: getScopeMastery(scope, getAllStats, getTestStats, getSectionStats),
     });
-  }, [scope, scores]);
+  }, [scope, scores, getAllStats, getTestStats, getSectionStats]);
 
-  useEffect(() => {
-    if (queue === null) initQueue();
-  }, []);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handler = (e) => {
-      if (exitConfirm || sessionDone || !queue) return;
-      if (e.key === '1') handleRate(2);
-      if (e.key === '2') handleRate(1);
-      if (e.key === '3') handleRate(0);
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [queue, currentIndex, exitConfirm, sessionDone]);
-
-  const handleRate = (rating) => {
+  const handleRate = useCallback((rating) => {
     if (!queue || currentIndex >= queue.length) return;
     const item = queue[currentIndex];
     setScore(item.sectionId, item.questionIndex, rating);
@@ -101,7 +91,19 @@ export default function StudyView() {
     } else {
       setCurrentIndex(nextIndex);
     }
-  };
+  }, [queue, currentIndex, setScore]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e) => {
+      if (exitConfirm || sessionDone || !queue) return;
+      if (e.key === '1') handleRate(2);
+      if (e.key === '2') handleRate(1);
+      if (e.key === '3') handleRate(0);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [queue, exitConfirm, sessionDone, handleRate]);
 
   const handleExit = () => {
     if (sessionStats.rated > 0) {
@@ -110,10 +112,6 @@ export default function StudyView() {
       navigate(-1);
     }
   };
-
-  if (queue === null) {
-    return <div className="page"><p style={{ color: 'var(--muted)' }}>Loading…</p></div>;
-  }
 
   const mastery = getScopeMastery(scope, getAllStats, getTestStats, getSectionStats);
 
@@ -142,7 +140,7 @@ export default function StudyView() {
             <button
               className="btn btn-primary btn-large"
               style={{ background: color, borderColor: color, boxShadow: `0 4px 20px ${color}44` }}
-              onClick={initQueue}
+              onClick={resetSession}
             >
               Restart session
             </button>

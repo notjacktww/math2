@@ -665,6 +665,10 @@ h3 { font-size: 15px; font-weight: 600; }
   line-height: 1.8;
   color: var(--text-dim);
 }
+.solution-text-missing {
+  font-style: italic;
+  color: var(--muted);
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
@@ -862,18 +866,21 @@ h3 { font-size: 15px; font-weight: 600; }
   font-size: 0.95em;
 }
 .math-line {
-  white-space: nowrap;
-  overflow-x: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 /* Block equations – rendered with displayMode:true */
 .math-block {
   text-align: center;
   margin: 0.65em 0;
+  max-width: 100%;
 }
 .math-block .katex-display {
   margin: 0;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* ─── Responsive ──────────────────────────────── */
