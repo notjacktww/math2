@@ -9,7 +9,7 @@ const SUP = {
 const SUB = {
   '₀':'0','₁':'1','₂':'2','₃':'3','₄':'4',
   '₅':'5','₆':'6','₇':'7','₈':'8','₉':'9',
-  'ₙ':'n','ₖ':'k','ₐ':'a',
+  'ₙ':'n','ₖ':'k','ₐ':'a','ₕ':'h','ₚ':'p',
 };
 const GREEK = {
   'α':'\\alpha','β':'\\beta','γ':'\\gamma','δ':'\\delta',
@@ -22,7 +22,7 @@ const GREEK = {
 };
 
 const SUP_RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹ⁿˣᵏʳ]+/g;
-const SUB_RE = /[₀₁₂₃₄₅₆₇₈₉ₙₖₐ]+/g;
+const SUB_RE = /[₀₁₂₃₄₅₆₇₈₉ₙₖₐₕₚ]+/g;
 
 function sups(s) { return s.split('').map(c => SUP[c] ?? c).join(''); }
 function subs(s) { return s.split('').map(c => SUB[c] ?? c).join(''); }
@@ -52,7 +52,7 @@ function exprToLatex(e) {
   e = e.replace(/∛\(([^)]+)\)/g, (_, inner) => `\\sqrt[3]{${exprToLatex(inner)}}`);
   e = e.replace(/∛([A-Za-z0-9])/g, '\\sqrt[3]{$1}');
   e = e.replace(/√\(([^)]+)\)/g, (_, inner) => `\\sqrt{${exprToLatex(inner)}}`);
-  e = e.replace(/√([A-Za-z0-9])/g, '\\sqrt{$1}');
+  e = e.replace(/√([0-9]+|[A-Za-z])/g, '\\sqrt{$1}');
   return e;
 }
 
@@ -156,7 +156,7 @@ function applyPatterns(text) {
   t = t.replace(/√\(([^)]+)\)/g, (_, inner) =>
     mark(`\\sqrt{${exprToLatex(inner)}}`)
   );
-  t = t.replace(/√([A-Za-z0-9])/g, (_, x) => mark(`\\sqrt{${x}}`));
+  t = t.replace(/√([0-9]+|[A-Za-z])/g, (_, x) => mark(`\\sqrt{${x}}`));
 
   // ── 7. Subscripted variables: C₁, y₁, N₀, T_b-style ────────────────────
   // Letter immediately followed by one or more subscript digits/letters
