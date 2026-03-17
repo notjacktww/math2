@@ -37,13 +37,13 @@ function exprToLatex(e) {
   e = e.replace(/≤/g,'\\leq').replace(/≥/g,'\\geq').replace(/≠/g,'\\neq');
   e = e.replace(/·/g,'\\cdot').replace(/×/g,'\\times');
   e = e.replace(/½/g,'\\tfrac{1}{2}').replace(/¼/g,'\\tfrac{1}{4}');
-  e = e.replace(/\bsin\b/g,'\\sin').replace(/\bcos\b/g,'\\cos');
-  e = e.replace(/\btan\b/g,'\\tan').replace(/\bcot\b/g,'\\cot');
-  e = e.replace(/\bsec\b/g,'\\sec').replace(/\bcsc\b/g,'\\csc');
-  e = e.replace(/\bln\b/g,'\\ln').replace(/\blog\b/g,'\\log');
-  e = e.replace(/\blim\b/g,'\\lim').replace(/\barctan\b/g,'\\arctan');
-  e = e.replace(/\barcsin\b/g,'\\arcsin').replace(/\barccos\b/g,'\\arccos');
-  e = e.replace(/\bexp\b/g,'\\exp');
+  e = e.replace(/(?<!\\)\bsin\b/g,'\\sin').replace(/(?<!\\)\bcos\b/g,'\\cos');
+  e = e.replace(/(?<!\\)\btan\b/g,'\\tan').replace(/(?<!\\)\bcot\b/g,'\\cot');
+  e = e.replace(/(?<!\\)\bsec\b/g,'\\sec').replace(/(?<!\\)\bcsc\b/g,'\\csc');
+  e = e.replace(/(?<!\\)\bln\b/g,'\\ln').replace(/(?<!\\)\blog\b/g,'\\log');
+  e = e.replace(/(?<!\\)\blim\b/g,'\\lim').replace(/(?<!\\)\barctan\b/g,'\\arctan');
+  e = e.replace(/(?<!\\)\barcsin\b/g,'\\arcsin').replace(/(?<!\\)\barccos\b/g,'\\arccos');
+  e = e.replace(/(?<!\\)\bexp\b/g,'\\exp');
   // Nested e^(...) inside expressions
   e = e.replace(/e\^\(([^)]+)\)/g, (_, inner) => `e^{${exprToLatex(inner)}}`);
   // x^(...) inside expressions
