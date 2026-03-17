@@ -33,7 +33,7 @@ function exprToLatex(e) {
   e = e.replace(SUP_RE, m => `^{${sups(m)}}`);
   e = e.replace(SUB_RE, m => `_{${subs(m)}}`);
   for (const [u, l] of Object.entries(GREEK)) e = e.split(u).join(l + ' ');
-  e = e.replace(/∞/g,'\\infty').replace(/→/g,'\\to').replace(/±/g,'\\pm');
+  e = e.replace(/∞/g,'\\infty ').replace(/→/g,'\\to ').replace(/±/g,'\\pm ');
   e = e.replace(/≤/g,'\\leq').replace(/≥/g,'\\geq').replace(/≠/g,'\\neq');
   e = e.replace(/·/g,'\\cdot').replace(/×/g,'\\times');
   e = e.replace(/½/g,'\\tfrac{1}{2}').replace(/¼/g,'\\tfrac{1}{4}');
