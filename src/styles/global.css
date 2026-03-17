@@ -861,7 +861,8 @@ h3 { font-size: 15px; font-weight: 600; }
 .solution-text .katex {
   font-size: 0.95em;
 }
-.question-text, .solution-text {
+.math-line {
+  white-space: nowrap;
   overflow-x: auto;
 }
 
