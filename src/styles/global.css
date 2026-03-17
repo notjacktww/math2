@@ -853,10 +853,16 @@ h3 { font-size: 15px; font-weight: 600; }
   vertical-align: -0.1em;
 }
 .katex-html {
-  white-space: normal;
+  white-space: nowrap;
 }
 .question-text .katex {
   font-size: 1.05em;
+}
+.solution-text .katex {
+  font-size: 0.95em;
+}
+.question-text, .solution-text {
+  overflow-x: auto;
 }
 
 /* Block equations – rendered with displayMode:true */
