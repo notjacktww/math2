@@ -512,7 +512,7 @@ h3 { font-size: 15px; font-weight: 600; }
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   margin-bottom: 0.6rem;
-  overflow: hidden;
+  overflow: clip;
   background: var(--card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
