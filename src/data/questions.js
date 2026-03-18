@@ -564,3 +564,38 @@ export const DATA = {tests:[
 ]}
 ]}
 ]};
+
+function normalizeTestCoverage(data) {
+  const test2 = data.tests.find((test) => test.id === "t2");
+  const test3 = data.tests.find((test) => test.id === "t3");
+  if (!test2 || !test3) return;
+
+  const section154Index = test2.sections.findIndex((section) => section.id === "15.4");
+  if (section154Index !== -1) {
+    const [section154] = test2.sections.splice(section154Index, 1);
+    section154.test = "t3";
+    if (!test3.sections.some((section) => section.id === "15.4")) {
+      test3.sections.unshift(section154);
+    }
+  }
+
+  const section159 = test3.sections.find((section) => section.id === "15.9");
+  if (!section159) return;
+
+  section159.name = "15.9 Nonhomogeneous — Constant Coefficients (Operator Method)";
+
+  const operatorSolve = section159.ptypes.find((ptype) => ptype.id === "both");
+  if (operatorSolve) operatorSolve.name = "Full solution: use operator method";
+
+  const trialForm = section159.ptypes.find((ptype) => ptype.id === "form-only");
+  if (trialForm) trialForm.name = "Trial form only";
+
+  section159.questions.forEach((question) => {
+    question.text = question.text.replace(
+      "Find $y_p$ by both undetermined coefficients and operator methods; find the general solution:",
+      "Use the operator method to find $y_p$ and then write the general solution:"
+    );
+  });
+}
+
+normalizeTestCoverage(DATA);
